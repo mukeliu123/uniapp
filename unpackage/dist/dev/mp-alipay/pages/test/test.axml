@@ -1,0 +1,1 @@
+<view class="test _div"><block a:if="{{myTreeShow}}"><my-tree vue-id="f44b2d54-1" menuTemplate="{{myTreeTemplate}}" menuNode="{{myTreeNode}}" onVueInit="__l"></my-tree></block><block a:if="{{myCalendar.show}}"><my-calendar vue-id="f44b2d54-2" options="{{myCalendar.options}}" onVueInit="__l"></my-calendar></block></view>

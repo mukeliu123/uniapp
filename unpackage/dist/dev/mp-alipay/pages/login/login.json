@@ -1,0 +1,6 @@
+{
+  "defaultTitle": "登录授权",
+  "usingComponents": {
+    "u-button": "/node-modules/uview-ui/components/u-button/u-button"
+  }
+}

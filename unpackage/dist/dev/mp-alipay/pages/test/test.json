@@ -1,0 +1,7 @@
+{
+  "defaultTitle": "测试页面",
+  "usingComponents": {
+    "my-tree": "/components/my-tree/my-tree",
+    "my-calendar": "/components/my-calendar/my-calendar"
+  }
+}

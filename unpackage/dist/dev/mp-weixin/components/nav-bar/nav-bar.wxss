@@ -1,0 +1,45 @@
+.nav-bar {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 101;
+}
+.nav-bar .bar-line {
+  height: 44px;
+}
+.nav-bar .bar-line .bar-no-custom {
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.nav-bar .bar-line .bar-no-custom .bar-content-back {
+  font-size: 32rpx !important;
+  position: absolute;
+  left: 30rpx;
+}
+.nav-bar .bar-line .bar-no-custom .bar-title {
+  font-size: 32rpx;
+}
+.nav-bar .bar-line .bar-custom {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  width: 100%;
+  height: 44px;
+}
+

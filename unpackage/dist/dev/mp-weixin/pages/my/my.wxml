@@ -1,0 +1,1 @@
+<view class="my"><block wx:if="{{noLogin}}"><u-button vue-id="704e9d00-1" type="primary" data-event-opts="{{[['^click',[['nextLogin']]]]}}" bind:click="__e" bind:__l="__l" vue-slots="{{['default']}}">点击登录</u-button></block><block wx:else><view>{{"昵称："+userInfo.nickName}}</view></block></view>

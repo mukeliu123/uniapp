@@ -1,0 +1,1 @@
+<view class="my"><block a:if="{{noLogin}}"><u-button vue-id="70449cd6-1" type="primary" data-event-opts="{{[['^click',[['nextLogin']]]]}}" onClick="__e" onVueInit="__l">点击登录</u-button></block><block a:else><view>{{"昵称："+userInfo.nickName}}</view></block></view>

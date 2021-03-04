@@ -1,0 +1,71 @@
+{
+  "description": "项目配置文件。",
+  "packOptions": {
+    "ignore": []
+  },
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "minified": true,
+    "postcss": true
+  },
+  "compileType": "miniprogram",
+  "libVersion": "",
+  "appid": "wxc046c0b666ba95d2",
+  "projectname": "uniapp-test",
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "current": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": 0,
+      "list": [
+        {
+          "name": "测试分类",
+          "query": "",
+          "id": 0,
+          "pathName": "pages/classification/classification"
+        },
+        {
+          "name": "测试表单",
+          "query": "",
+          "id": 1,
+          "pathName": "pages_a/form/form"
+        },
+        {
+          "name": "lb-picker",
+          "query": "",
+          "id": 2,
+          "pathName": "pages/lb-picker/lb-picker"
+        },
+        {
+          "name": "w-picker",
+          "query": "",
+          "id": 3,
+          "pathName": "pages/w-picker/w-picker"
+        },
+        {
+          "name": "upload-download",
+          "query": "",
+          "id": 4,
+          "pathName": "pages/upload-download/upload-download"
+        },
+        {
+          "name": "test",
+          "query": "",
+          "id": 5,
+          "pathName": "pages/test/test"
+        }
+      ]
+    }
+  }
+}

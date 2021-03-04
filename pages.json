@@ -1,0 +1,137 @@
+{
+	"easycom": {
+		"^u-(.*)": "uview-ui/components/u-$1/u-$1.vue"
+	},
+	"pages": [ //主包，pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "主页" //钉钉小程序必须设置
+			}
+		},
+		{
+			"path": "pages/classification/classification",
+			"style": {
+				"navigationBarTitleText": "分类"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "我的"
+			}
+		},
+		{
+			"path":"pages/login/login",
+			"style":{
+				"navigationBarTitleText": "登录授权"
+			}
+		},
+		{
+			"path":"pages/test/test",
+			"style":{
+				"navigationBarTitleText":"测试页面"
+			}
+		}
+	],
+	"subPackages": [ //分包
+		{
+			"root": "pages_a", //必须与pages同级
+			"pages": [
+				{
+					"path": "list/list",
+					"style": {
+						"enablePullDownRefresh": true
+					}
+				},
+				{
+					"path": "form/form"
+				},
+				{
+					"path": "calendar-transfer/calendar-transfer",
+					"style": {
+						"navigationBarTitleText": "日历"
+					}
+				}
+			]
+		}
+	],
+	"preloadRule": { //分包预加载
+		"pages_a/list/list": {
+			"network": "all",
+			"packages": ["pages_a"]
+		},
+		"pages_a/form/form": {
+			"network": "all",
+			"packages": ["pages_a"]
+		}
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式（list 的索引项）
+		"list": [{
+				"name": "测试分类",
+				"path": "pages/classification/classification", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "测试表单",
+				"path": "pages_a/form/form", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "lb-picker",
+				"path": "pages/lb-picker/lb-picker", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "w-picker",
+				"path": "pages/w-picker/w-picker", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "upload-download",
+				"path": "pages/upload-download/upload-download", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			},
+			{
+				"name": "test",
+				"path": "pages/test/test", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	},
+	"globalStyle": { //全局窗口设置
+		"navigationStyle": "default", //custom or default  (钉钉小程序不支持，其它支持)
+		"navigationBarTextStyle": "white",//white or black
+		"navigationBarTitleText": "uni-app",//导航栏标题文字内容
+		"navigationBarBackgroundColor": "#000",//导航栏背景颜色
+		"enablePullDownRefresh": false,//是否支持全局上拉加载
+		"backgroundColor": "#e4e4e4",//下拉时显示的窗口颜色 （仅微信小程序支持）
+		"backgroundTextStyle": "dark"//下拉时loading样式，仅支持dark/light （仅微信小程序支持）
+
+	},
+	"tabBar": { //底部导航
+		"list": [{
+				"text": "首页",
+				"pagePath": "pages/home/home",
+				"iconPath": "static/assets/tabbar/home_tabbar.png",
+				"selectedIconPath": "static/assets/tabbar/home_o_tabbar.png"
+			},
+			{
+				"text": "分类",
+				"pagePath": "pages/classification/classification",
+				"iconPath": "static/assets/tabbar/class_tabbar.png",
+				"selectedIconPath": "static/assets/tabbar/class_o_tabbar.png"
+			},
+			{
+				"text": "我的",
+				"pagePath": "pages/my/my",
+				"iconPath": "static/assets/tabbar/my_tabbar.png",
+				"selectedIconPath": "static/assets/tabbar/my_o_tabbar.png"
+			}
+		],
+		"color": "#707070", //tabbar文字颜色
+		"selectedColor": "#d81e06",//tabbar文字选中颜色
+		"borderStyle": "black"//tabbar上边框的颜色
+	}
+}

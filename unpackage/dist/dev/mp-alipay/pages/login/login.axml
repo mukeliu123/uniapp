@@ -1,0 +1,1 @@
+<view class="login"><block a:if="{{!$store.state.hasLogin}}"><view class="login_content"><u-button vue-id="359d2442-1" type="primary" data-event-opts="{{[['^click',[['alHandLogin']]]]}}" onClick="__e" onVueInit="__l">点击授权(al)</u-button></view></block></view>

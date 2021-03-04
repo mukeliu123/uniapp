@@ -1,0 +1,1 @@
+<view class="calendar-transfer"><block wx:if="{{show}}"><my-calendar vue-id="31620168-1" options="{{options}}" data-event-opts="{{[['^sendTimeStamp',[['backPage']]]]}}" bind:sendTimeStamp="__e" bind:__l="__l"></my-calendar></block></view>
