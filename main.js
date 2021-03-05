@@ -24,8 +24,6 @@ if(store.state.env === 'test'){
 } else{
 	Vue.prototype.$env = env.ENV;
 }
-console.log('hello world');
-
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
