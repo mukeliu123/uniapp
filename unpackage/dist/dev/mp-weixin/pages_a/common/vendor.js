@@ -1,6 +1,28 @@
 (global["webpackJsonp"] = global["webpackJsonp"] || []).push([["pages_a/common/vendor"],{
 
-/***/ 97:
+/***/ 100:
+/*!****************************************************!*\
+  !*** D:/hub-idea/HubPro/uniapp-02/utils/common.js ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.verifyTokenStorage = verifyTokenStorage; //验证token是否存在本地
+function verifyTokenStorage() {
+  var token = uni.getStorageSync('token');
+  if (!token) {
+    uni.removeStorageSync('token');
+    return false;
+  } else {
+    return true;
+  }
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
+
+/***/ }),
+
+/***/ 99:
 /*!****************************************************!*\
   !*** D:/hub-idea/HubPro/uniapp-02/utils/verify.js ***!
   \****************************************************/
@@ -44,28 +66,6 @@ var Token = /*#__PURE__*/function () {
 
 
 Token;exports.default = _default;
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
-
-/***/ }),
-
-/***/ 98:
-/*!****************************************************!*\
-  !*** D:/hub-idea/HubPro/uniapp-02/utils/common.js ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(uni) {Object.defineProperty(exports, "__esModule", { value: true });exports.verifyTokenStorage = verifyTokenStorage; //验证token是否存在本地
-function verifyTokenStorage() {
-  var token = uni.getStorageSync('token');
-  if (!token) {
-    uni.removeStorageSync('token');
-    return false;
-  } else {
-    return true;
-  }
-}
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./node_modules/@dcloudio/uni-mp-weixin/dist/index.js */ 1)["default"]))
 
 /***/ })

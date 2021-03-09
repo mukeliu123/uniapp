@@ -18,26 +18,33 @@
 				options:{
 					showMonthNum:2,
 					componentType:'traffic',
-					checkDateTimeStamp:''
+					checkDateTimeStamp:'',
+					checkDateTimeStampByHotel:[]
 				},
 				backPath:''
 			}
 		},
 		onLoad(e){
 			setTimeout(_=>{
-				this.options.showMonthNum = e.num;
+				console.log(e);
 				this.options.componentType = e.type;
-				this.options.checkDateTimeStamp = e.timeStamp;
+				if(this.options.componentType === 'traffic'){
+					this.options.checkDateTimeStamp = e.times || '';
+					this.checkDateTimeStampByHotel = [];
+				}
+				else if(this.options.componentType === 'hotel'){
+					this.options.checkDateTimeStamp = '';
+					this.options.checkDateTimeStampByHotel = [e.times.split(',')[0],e.times.split(',')[1]];
+				}
 				this.backPath = e.path;
 				this.show = true;
 			}, 0);
 		},
 		methods:{
-			backPage(time){
-				this.show = false;
-				if(time && this.backPath){
+			backPage(obj){
+				if(obj && this.backPath){
 					uni.reLaunch({
-						url:this.backPath+'?timeStamp='+time
+						url:this.backPath+'?times='+obj.values+'&type='+obj.type
 					});
 				}
 			}

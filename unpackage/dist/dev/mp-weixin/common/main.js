@@ -33,7 +33,6 @@ if (_index.default.state.env === 'test') {
 } else {
   _vue.default.prototype.$env = _index2.default.ENV;
 }
-
 _vue.default.config.productionTip = false;
 _App.default.mpType = 'app';
 var app = new _vue.default(_objectSpread(_objectSpread({},

@@ -34,9 +34,10 @@
 					<view class="item-title">{{item.year}}年{{item.month+1<10?'0'+(item.month+1) : item.month+1}}月</view>
 					<view class="item-list">
 						<view class="list-row" v-for="(child, childIndex) in item.dateTemplate" :key="childIndex">
-							<view class="row-item" v-for="(grand, grandIndex) in child" :key="grandIndex" @click="checkCurrentItem(grand)">
+							<view class="row-item" v-for="(grand, grandIndex) in child" :key="grandIndex" >
 								<view 
 								class="row-item-inner" 
+								@click="checkCurrentItem(grand)"
 								:class="{
 									'no-work-day':grand.weekType == 2,
 									'hotel-start':grand.timeStamp == hotel.startStamp,
@@ -52,6 +53,10 @@
 					</view>
 				</view>
 			</template>
+		</view>
+		<!-- 确定 -->
+		<view class="confirm">
+			<u-button type="primary" class="confirm-btn" :disabled="referLoading" @click="referResult">确定</u-button>
 		</view>
 	</view>
 </template>
@@ -70,6 +75,7 @@
 						checkDateTimeStamp:'',
 						showMonthNum: 2,
 						componentType:'traffic', // traffic 交通 / hotel 酒店
+						checkDateTimeStampByHotel:[]
 					}
 				}
 			}
@@ -88,7 +94,8 @@
 					end:false,
 					startStamp:'',
 					endStamp:''
-				}
+				},
+				referLoading:false
 			}
 		},
 		created() {
@@ -97,11 +104,49 @@
 				this.traffic.checkDateTimeStamp = this.options.checkDateTimeStamp || '';
 			} 
 			else if(this.componentType === 'hotel'){
-				console.log('hotel');
+				if(this.options.checkDateTimeStampByHotel && this.options.checkDateTimeStampByHotel.length == 2){
+					this.hotel.startStamp = this.options.checkDateTimeStampByHotel[0];
+					this.hotel.endStamp = this.options.checkDateTimeStampByHotel[1];
+					this.hotel.start = true;
+					this.hotel.end = true;
+				}
 			}
 			this.renderCalendar(this.options.showMonthNum || 2);
 		},
 		methods: {
+			//提交选中值
+			referResult(){
+				if(this.componentType === 'traffic'){
+					if(!this.traffic.checkDateTimeStamp){
+						uni.showToast({
+						    title: '请选择购票日期',
+							icon:'none',
+						    duration: 2000
+						});
+						return;
+					}
+					this.$emit('sendTimeStamp',{values:[this.traffic.checkDateTimeStamp], type:'traffic'});
+				}
+				else if(this.componentType === 'hotel'){
+					if(!this.hotel.startStamp){
+						uni.showToast({
+						    title: '请选择开始日期',
+							icon:'none',
+						    duration: 2000
+						});
+						return;
+					}
+					if(!this.hotel.endStamp){
+						uni.showToast({
+						    title: '请选择结束日期',
+							icon:'none',
+						    duration: 2000
+						});
+						return;
+					}
+					this.$emit('sendTimeStamp',{values:[this.hotel.startStamp, this.hotel.endStamp], type:'hotel'});
+				}
+			},
 			//初始化当前日历组件
 			renderCalendar(n) {
 				let that = this;
@@ -116,69 +161,93 @@
 					months.push(that.getMonthCalendar(y, m));
 				}
 				this.dateList = months;
-				console.log(this.dateNode);
+				//初始化区间选中（hotel）
+				if(this.dateNode.length && this.hotel.end && this.hotel.start && this.componentType === 'hotel'){
+					let start = null;
+					let end = null;
+					this.dateNode.forEach((t, i)=>{
+						if(t.timeStamp == this.hotel.endStamp){
+							end = i;
+						}
+						if(t.timeStamp == this.hotel.startStamp){
+							start = i;
+						}
+					});
+					let arr = this.dateNode.slice(start+1, end);
+					arr.forEach(t=>{
+						t.sectionLight = true;
+					});
+				}
 			},
 			//选中当前日期
 			checkCurrentItem(item){
 				if(this.componentType === 'traffic'){
-					let times = new Date(item.year, item.month, item.day).getTime();
-					setTimeout(_=>{
-						this.$emit('sendTimeStamp',times);
-					}, 0);
-				} else{
-					this.dateNode.forEach(t=>{
-						t.sectionLight = false;
-					});
-					if(!this.hotel.start && !this.hotel.end){
-						this.hotel.start = true;
-						this.hotel.startStamp = item.timeStamp;
-						this.hotel.end = false;
-						this.hotel.endStamp = '';
-					} 
-					else if(this.hotel.start && !this.hotel.end){
-						if(item.timeStamp>this.hotel.startStamp){
-							this.hotel.start = true;
-							this.hotel.end = true;
-							this.hotel.startStamp = this.hotel.startStamp;
-							this.hotel.endStamp = item.timeStamp;
-							if(this.hotel.start && this.hotel.end){
-								let startIndex = null;
-								let endIndex = null;
-								console.log(this.hotel.startStamp);
-								console.log(this.hotel.endStamp);
-								this.dateNode.forEach((t, index)=>{
-									console.log(t.day + '--------' + t.timeStamp);
-									if(t.timeStamp == this.hotel.startStamp){
-										startIndex = index;
-									}
-									else if(t.timeStamp == this.hotel.endStamp){
-										endIndex = index;
-									}
-								});
-								if(startIndex && endIndex && endIndex>startIndex){
-									let arr = this.dateNode.slice(startIndex+1, endIndex);
-									arr.forEach(t=>{
-										t.sectionLight = true;
-										console.log(t.day);
-									})
-								}
+					this.handleByTraffic(item);
+				} 
+				else if(this.componentType === 'hotel'){
+					this.handleByHotel(item)
+				}
+			},
+			//处理选中结果 （traffic 交通）
+			handleByTraffic(item){
+				let times = new Date(item.year, item.month, item.day).getTime();
+				this.traffic.checkDateTimeStamp = times;
+			},
+			//处理选中结果 （hotel 酒店）
+			handleByHotel(item){
+				this.dateNode.forEach(t=>{
+					t.sectionLight = false;
+				});
+				//情况1：开始时间未确定 结束时间未确定 （确定开始时间）
+				if(!this.hotel.start && !this.hotel.end){
+					this.hotel.start = true;
+					this.hotel.startStamp = item.timeStamp;
+					this.hotel.end = false;
+					this.hotel.endStamp = '';
+				} 
+				//情况2：开始时间确定 结束时间未确定
+				else if(this.hotel.start && !this.hotel.end){
+					//如果当前选中时间大于开始时间 （确定结束时间） 可提交
+					if(item.timeStamp > this.hotel.startStamp){
+						let start = null;
+						let end = null;
+						this.dateNode.forEach((t, i)=>{
+							if(t.timeStamp === item.timeStamp){
+								end = i;
 							}
-						} 
-						else{
-							this.hotel.start = true;
-							this.hotel.startStamp = item.timeStamp;
-							this.hotel.end = false;
-							this.hotel.endStamp = '';
+							if(t.timeStamp === this.hotel.startStamp){
+								start = i;
+							}
+						});
+						//最大区间是30
+						if(end - start > 30){
+							end = start + 30;
 						}
+						this.hotel.start = true;
+						this.hotel.end = true;
+						this.hotel.startStamp = this.hotel.startStamp;
+						this.hotel.endStamp = this.dateNode[end].timeStamp;
+						let arr = this.dateNode.slice(start+1, end);
+						arr.forEach(t=>{
+							t.sectionLight = true;
+						});
 					} 
+					//如果当前选中时间小于等于开始时间 （重新确定开始时间）
 					else{
 						this.hotel.start = true;
-						this.hotel.end = false;
 						this.hotel.startStamp = item.timeStamp;
+						this.hotel.end = false;
 						this.hotel.endStamp = '';
 					}
-					
+				} 
+				//情况3：开始时间确定 结束时间确定（重新确定开始时间）
+				else{
+					this.hotel.start = true;
+					this.hotel.end = false;
+					this.hotel.startStamp = item.timeStamp;
+					this.hotel.endStamp = '';
 				}
+				
 			},
 			//得到对应月份日历数据
 			getMonthCalendar(year, month) {
@@ -236,10 +305,10 @@
 				monthArr = [].concat(prevArr, currentMonth, nextArr);
 				let endArr = [];
 				endArr = that.groupSliceMonthByFor(monthArr, 7);
-				//添加区间高亮
-				monthArr.forEach(item=>{
+				//添加区间高亮 (此处应注意是当月的日期)
+				currentMonth.forEach(item=>{
 					item.sectionLight = false;
-					that.dateNode.push(item)
+					that.dateNode.push(item);
 				});
 				return {
 					year: year,
@@ -280,7 +349,7 @@
 				arx.forEach(item => {
 					let cnDate = month + 1 > 12 ? calendar.solar2lunar(year + 1, 1, item.day) : calendar.solar2lunar(year, month + 1,
 						item.day);
-					let timeStamp = new Date(year, month, item.day).getTime();
+					let timeStamp = new Date(new Date(year, month, item.day).toLocaleDateString()).getTime();
 					let week = new Date(year, month, item.day * 1).getDay();
 					if (week == 0 || week == 6) {
 						item.weekType = 2
@@ -342,6 +411,28 @@
 		overflow-y: auto;
 		background-color: #fff;
 		padding-bottom: 200rpx;
+		.confirm{
+			width:100%;
+			height:120rpx;
+			// border-top:1rpx solid #eee;
+			box-shadow:-1rpx -1rpx 1rpx 1rpx #eee;
+			background-color: #fff;
+			position: fixed;
+			z-index: 1;
+			left:0;
+			bottom:0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			.confirm-btn{
+				width:80%;
+				margin:0;
+				border-radius: 50rpx;
+				overflow: hidden;
+				letter-spacing: 1rpx;
+				font-size:32rpx;
+			}
+		}
 		.weeks {
 			width: 100%;
 			position: fixed;
@@ -368,7 +459,6 @@
 			.month-item {
 				width: 100%;
 				margin-bottom: 50rpx;
-
 				.item-title {
 					width: 100%;
 					height: 40rpx;
@@ -434,7 +524,7 @@
 								}
 								
 								&.hotel-section{
-									background-color: #bce8ff;
+									background-color: #87b7ff;
 									.day {
 										color: #fff;
 									}
